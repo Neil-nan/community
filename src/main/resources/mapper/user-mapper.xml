@@ -27,7 +27,8 @@
     <select id="selectByEmail" resultType="User">
         select <include refid="selectFields"></include>
         from user
-        where email = #{email}
+        where
+        email = #{email}
     </select>
 
     <insert id="insertUser" parameterType="User" keyProperty="id">
