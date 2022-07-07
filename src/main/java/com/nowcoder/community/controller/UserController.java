@@ -11,14 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -133,6 +131,30 @@ public class UserController {
             }
         }
 
+    }
+
+    @LoginRequired
+    @PostMapping("/password")
+    public String changePassword(String oldPassword, String newPassword, String rePassword, Model model, @CookieValue("ticket") String ticket){
+        //先获取user
+        User user = hostHolder.getUser();
+
+        //先验证new和re
+        if(StringUtils.isBlank(newPassword) || StringUtils.isBlank(rePassword) || !newPassword.equals(rePassword)){
+            model.addAttribute("reMsg", "密码不一致！");
+            return "/site/setting";
+        }
+
+        //验证新旧账号
+        Map<String, Object> map = userService.updatePassword(user.getId(), oldPassword, newPassword);
+        if(map.containsKey("success")){//成功,然后重新登录
+            userService.logout(ticket);
+            return "redirect:/login";
+        }else {
+            model.addAttribute("oldMsg", map.get("oldMsg"));
+            model.addAttribute("newMsg", map.get("newMsg"));
+            return "/site/setting";
+        }
     }
 
 }

@@ -2,8 +2,10 @@ package com.nowcoder.community.dao;
 
 import com.nowcoder.community.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 
 @Mapper
+//@Component
 public interface UserMapper {
 
     //查找（通过id 姓名 邮箱）
