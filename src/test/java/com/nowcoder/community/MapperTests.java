@@ -112,4 +112,12 @@ public class MapperTests {
 
         discussPostMapper.insertDiscussPost(discussPost);
     }
+
+    @Test
+    public void testSelectDiscussPostById(){
+        DiscussPost post = discussPostMapper.selectDiscussPostById(283);
+
+        System.out.println(post.getTitle());
+        System.out.println(post.getContent());
+    }
 }
