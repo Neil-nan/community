@@ -1,8 +1,10 @@
 package com.nowcoder.community;
 
+import com.nowcoder.community.dao.CommentMapper;
 import com.nowcoder.community.dao.DiscussPostMapper;
 import com.nowcoder.community.dao.LoginTicketMapper;
 import com.nowcoder.community.dao.UserMapper;
+import com.nowcoder.community.entity.Comment;
 import com.nowcoder.community.entity.DiscussPost;
 import com.nowcoder.community.entity.LoginTicket;
 import com.nowcoder.community.entity.User;
@@ -30,6 +32,9 @@ public class MapperTests {
 
     @Autowired
     private LoginTicketMapper loginTicketMapper;
+
+    @Autowired
+    private CommentMapper commentMapper;
 
     @Test
     public void testSelectUser() {
@@ -119,5 +124,29 @@ public class MapperTests {
 
         System.out.println(post.getTitle());
         System.out.println(post.getContent());
+    }
+
+    @Test
+    public void testSelectCommentsByEntity(){
+        List<Comment> comments = commentMapper.selectCommentsByEntity(1, 228, 0, 15);
+        for (Comment comment : comments) {
+            System.out.println(comment);
+        }
+
+        int count = commentMapper.selectCountByEntity(1, 228);
+        System.out.println(count);
+    }
+
+    @Test
+    public void testInsertComment(){
+        Comment comment = new Comment();
+        comment.setUserId(158);
+        comment.setEntityType(1);
+        comment.setEntityId(228);
+        comment.setTargetId(0);
+        comment.setContent("你好");
+        comment.setCreateTime(new Date());
+
+        commentMapper.insertComment(comment);
     }
 }
