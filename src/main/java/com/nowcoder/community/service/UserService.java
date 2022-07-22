@@ -139,6 +139,7 @@ public class UserService implements CommunityConstant {
             return map;
         }
 
+
         //验证账号
         User user = userMapper.selectByName(username);
         if(user == null){
